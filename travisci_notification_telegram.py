@@ -61,14 +61,23 @@ def hello():
     else:
         status_icon = u'⚠️'
 
-    if repo_owner in config and repo_name in config[repo_owner]:
-        chat_ids = [x.strip() for x in config[repo_owner][repo_name].split(',')]
-        for chat in chat_ids:
-            bot.send_message(chat,
-                             bot_message.format(status_icon, build_id, status_message, repo_owner,
-                                                repo_name, branch, commit_id[:7], compare_url,
-                                                author, commit_msg),
-                             parse_mode='Markdown')
+    if repo_owner in config:
+        if repo_name in config[repo_owner]:
+            chat_ids = [x.strip() for x in config[repo_owner][repo_name].split(',')]
+            for chat in chat_ids:
+                bot.send_message(chat,
+                                 bot_message.format(status_icon, build_id, status_message,
+                                                    repo_owner, repo_name, branch, commit_id[:7],
+                                                    compare_url, author, commit_msg),
+                                 parse_mode='Markdown')
+        elif '*' in config[repo_owner]:
+            chat_ids = [x.strip() for x in config[repo_owner]['*'].split(',')]
+            for chat in chat_ids:
+                bot.send_message(chat,
+                                 bot_message.format(status_icon, build_id, status_message,
+                                                    repo_owner, repo_name, branch, commit_id[:7],
+                                                    compare_url, author, commit_msg),
+                                 parse_mode='Markdown')
 
     return "OK"
 
