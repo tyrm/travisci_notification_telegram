@@ -17,7 +17,8 @@ from telegram.error import NetworkError, Unauthorized
 coloredlogs.install(level='DEBUG')
 
 parser = argparse.ArgumentParser(description='TravisCI notifier for Telegram')
-parser.add_argument("-p", "--port", type=int, help="increase output verbosity", default=8080)
+parser.add_argument("-p", "--port", type=int, help="listening port of notifier", default=8080)
+parser.add_argument("-H", "--host", help="listening hostname of notifier", default='0.0.0.0')
 args = parser.parse_args()
 logging.debug(args)
 
@@ -73,7 +74,7 @@ def hello():
 
 
 def main():
-    app.run(port=int(args.port))
+    app.run(host=args.host, port=int(args.port))
 
 
 if __name__ == "__main__":
